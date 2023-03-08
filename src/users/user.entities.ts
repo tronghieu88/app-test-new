@@ -6,7 +6,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 import { IUser } from './user.interface';
 
 export type UserDocument = HydratedDocument<User>;
-
+// ObjectType: de tra ve cac gia tri cho api
 @ObjectType()
 export class UserResult implements IResult<User> {
   @Field(() => [User])
