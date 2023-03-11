@@ -27,12 +27,20 @@ type Query {
   test: String!
   getAllUser: UserResult!
   findOne(findOneUser: String): User!
+  sortUserName(
+    """
+    Sort A-Z: 1 
+    Sort Z-A: -1
+    """
+    option: Float!
+  ): UserResult!
 }
 
 type Mutation {
   testMutation: String!
   createUser(userInput1: UserInput!): User!
   deleteOne(Delete: UserInput): Boolean!
+  updateOne(userName: String!, userInput: UserInput!): Boolean!
 }
 
 input UserInput {

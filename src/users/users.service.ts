@@ -13,14 +13,6 @@ export class UsersService {
     return await this.userModel.create(userInput);
   }
 
-  async getAll(): Promise<UserResult> {
-    const [results, totalCount] = await Promise.all([
-      this.userModel.find(),
-      this.userModel.countDocuments(),
-    ]);
-    return { results, totalCount };
-  }
-
   async findOne(userName: string): Promise<User | null> {
     const user = await this.userModel.findOne({ userName: userName });
     // console.log(user);
@@ -38,5 +30,40 @@ export class UsersService {
       { $set: { isDeleted: true } },
     );
     return userUpdate ? true : false;
+  }
+
+  async updateOne(userName: string, userInput: UserInput): Promise<Boolean> {
+    const userNew = await this.userModel.findOneAndUpdate(
+      { userName: userName },
+      { $set: { userName: userInput.userName, password: userInput.password } },
+      {
+        new: true,
+      },
+    );
+    return userNew ? true : false;
+  }
+
+  async getAll(): Promise<UserResult> {
+    const [results, totalCount] = await Promise.all([
+      this.userModel.find(),
+      this.userModel.countDocuments(),
+    ]);
+    return { results, totalCount };
+  }
+
+  async getAllAndSortUserName(option: number): Promise<UserResult> {
+    let query: any;
+    if (option === 1) {
+      query = this.userModel.find().sort({ userName: 1 });
+    } else {
+      query = this.userModel.find().sort({ userName: -1 });
+    }
+    const [results, totalCount] = await Promise.all([
+      query,
+
+      this.userModel.countDocuments(),
+    ]);
+    // console.log(results);
+    return { results, totalCount };
   }
 }

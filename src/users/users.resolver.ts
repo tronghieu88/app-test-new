@@ -47,4 +47,25 @@ export class UsersResolver {
   ): Promise<Boolean> {
     return await this.usersService.deleteOne(Delete);
   }
+
+  @Mutation(() => Boolean)
+  async updateOne(
+    @Args({ name: 'userName', type: () => String }) userName: string,
+    @Args({ name: 'userInput', type: () => UserInput }) userInput: UserInput,
+  ): Promise<Boolean> {
+    const userNew = await this.usersService.updateOne(userName, userInput);
+    return userNew;
+  }
+
+  @Query(() => UserResult)
+  async sortUserName(
+    @Args({
+      name: 'option',
+      type: () => Number,
+      description: 'Sort A-Z: 1 \nSort Z-A: -1',
+    })
+    option: number,
+  ): Promise<UserResult> {
+    return await this.usersService.getAllAndSortUserName(option);
+  }
 }
