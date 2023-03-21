@@ -3,14 +3,18 @@
 # ------------------------------------------------------
 
 type UserResult {
-  results: [User!]!
-  totalCount: Float!
+  results: [User!]
+  totalCount: Float
 }
 
 type User {
   _id: ID!
   userName: String!
   password: String!
+  email: String
+  phoneNumber: String
+  age: Float
+  description: String
   createdAt: DateTime!
   isDeleted: Boolean!
   keyword: String!
@@ -46,4 +50,8 @@ type Mutation {
 input UserInput {
   userName: String!
   password: String!
+  email: String
+  phoneNumber: String
+  age: Float
+  description: String
 }

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { error } from 'console';
-import { Model } from 'mongoose';
+
+import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { UserInput } from './dto/user.dto';
 import { User, UserDocument, UserResult } from './user.entities';
 
@@ -32,10 +32,34 @@ export class UsersService {
     return userUpdate ? true : false;
   }
 
+  // async findOneAndUpdate(
+  //   filter: FilterQuery<User>,
+  //   update: UpdateQuery<User>,
+  // ): Promise<User> {
+  //   const userNew = await this.userModel.findOneAndUpdate(filter, update, {
+  //     new: true,
+  //   });
+  //   if (userNew === null)
+  //     throw new HttpException(
+  //       'Không tìm thấy userName này!',
+  //       HttpStatus.NOT_FOUND,
+  //     );
+  //   return userNew;
+  // }
+
   async updateOne(userName: string, userInput: UserInput): Promise<Boolean> {
     const userNew = await this.userModel.findOneAndUpdate(
       { userName: userName },
-      { $set: { userName: userInput.userName, password: userInput.password } },
+      {
+        $set: {
+          userName: userInput.userName,
+          password: userInput.password,
+          email: userInput.email,
+          phoneNumber: userInput.phoneNumber,
+          age: userInput.age,
+          description: userInput.description,
+        },
+      },
       {
         new: true,
       },
@@ -46,9 +70,10 @@ export class UsersService {
   async getAll(): Promise<UserResult> {
     const [results, totalCount] = await Promise.all([
       this.userModel.find(),
-      this.userModel.countDocuments(),
+      // this.userModel.countDocuments(),
+      this.userModel.find(),
     ]);
-    return { results, totalCount };
+    return { results, totalCount: totalCount.length };
   }
 
   async getAllAndSortUserName(option: number): Promise<UserResult> {

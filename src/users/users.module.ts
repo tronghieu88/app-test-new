@@ -6,7 +6,18 @@ import { User, UserSchema } from './user.entities';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeatureAsync([
+      {
+        name: User.name,
+        useFactory: () => {
+          const schema = UserSchema;
+          schema.pre(/^find/, function () {
+            this.find({ isDeleted: { $ne: true } });
+          });
+          return schema;
+        },
+      },
+    ]),
   ],
   providers: [UsersResolver, UsersService],
 })

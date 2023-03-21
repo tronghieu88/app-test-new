@@ -1,7 +1,9 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
+import { IsEmail, IsPhoneNumber } from 'class-validator';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { RoleEnum } from 'src/guard/enum';
 
 import { IUser } from './user.interface';
 
@@ -9,10 +11,10 @@ export type UserDocument = HydratedDocument<User>;
 // ObjectType: de tra ve cac gia tri cho api
 @ObjectType()
 export class UserResult implements IResult<User> {
-  @Field(() => [User])
+  @Field(() => [User], { nullable: true })
   results: User[];
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   totalCount: number;
 }
 
@@ -29,7 +31,26 @@ export class User implements IUser {
 
   @Prop(String)
   @Field()
+  // @HideField()
   password: string;
+
+  @IsEmail()
+  @Prop(String)
+  @Field({ nullable: true })
+  email?: string;
+
+  @IsPhoneNumber('VN')
+  @Prop(String)
+  @Field({ nullable: true })
+  phoneNumber?: string;
+
+  @Prop(Number)
+  @Field({ nullable: true })
+  age?: number;
+
+  @Prop(String)
+  @Field({ nullable: true })
+  description?: string;
 
   @Prop({ default: new Date() })
   @Field(() => Date)
@@ -37,6 +58,7 @@ export class User implements IUser {
 
   @Prop({ default: false })
   @Field(() => Boolean)
+  // @HideField()
   isDeleted?: boolean;
 
   @Prop(String)
@@ -50,6 +72,9 @@ export class User implements IUser {
   @Prop(String)
   @Field()
   slug?: string;
+
+  @HideField()
+  role?: RoleEnum;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

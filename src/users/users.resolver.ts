@@ -1,9 +1,12 @@
-import { Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Error } from 'mongoose';
 import { UserInput } from './dto/user.dto';
 import { User, UserResult } from './user.entities';
 import { UsersService } from './users.service';
+import { AuthGuard } from '@nestjs/passport';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/guard/role.guard';
+import { hasRoles } from 'src/guard/roles.deco';
+import { RoleEnum } from 'src/guard/enum';
 
 @Resolver()
 export class UsersResolver {
@@ -13,10 +16,12 @@ export class UsersResolver {
   test() {
     return 'Test users';
   }
+
   @Mutation(() => String)
   testMutation() {
     return 'Test mutation';
   }
+
   @Mutation(() => User)
   async createUser(
     @Args({ name: 'userInput1', type: () => UserInput }) userInput1: UserInput,
@@ -25,6 +30,8 @@ export class UsersResolver {
   }
 
   @Query(() => UserResult)
+  @UseGuards(GqlAuthGuard)
+  @hasRoles(RoleEnum.ADMIN)
   async getAllUser(): Promise<UserResult> {
     return await this.usersService.getAll();
   }
@@ -35,7 +42,7 @@ export class UsersResolver {
     findOneUser: string,
   ): Promise<User | null> {
     const userfind = await this.usersService.findOne(findOneUser);
-    console.log(userfind);
+    // console.log(userfind);
 
     return userfind;
   }
