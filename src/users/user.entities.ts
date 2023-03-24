@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsPhoneNumber } from 'class-validator';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { RoleEnum } from 'src/guard/enum';
+import { RoleEnum } from 'src/constants/enum';
 
 import { IUser } from './user.interface';
 

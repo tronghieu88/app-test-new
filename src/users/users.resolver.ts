@@ -5,8 +5,10 @@ import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/guard/role.guard';
-import { hasRoles } from 'src/guard/roles.deco';
-import { RoleEnum } from 'src/guard/enum';
+import { hasRoles } from 'src/constants/roles.deco';
+import { RoleEnum } from 'src/constants/enum';
+import { LoginAccessGuard } from 'src/guard/loginAccess.guard';
+import { GetUser } from 'src/decorators/getuser.decorators';
 
 @Resolver()
 export class UsersResolver {
@@ -14,12 +16,12 @@ export class UsersResolver {
 
   @Query(() => String)
   test() {
-    return 'Test users';
+    return 'Khong thay doi du lieu';
   }
 
   @Mutation(() => String)
   testMutation() {
-    return 'Test mutation';
+    return 'Thay doi du lieu';
   }
 
   @Mutation(() => User)
@@ -30,8 +32,8 @@ export class UsersResolver {
   }
 
   @Query(() => UserResult)
-  @UseGuards(GqlAuthGuard)
-  @hasRoles(RoleEnum.ADMIN)
+  @UseGuards(LoginAccessGuard)
+  // @hasRoles(RoleEnum.ADMIN)
   async getAllUser(): Promise<UserResult> {
     return await this.usersService.getAll();
   }
@@ -74,5 +76,12 @@ export class UsersResolver {
     option: number,
   ): Promise<UserResult> {
     return await this.usersService.getAllAndSortUserName(option);
+  }
+
+  @Query(() => User)
+  @UseGuards(LoginAccessGuard)
+  getCurrentUser(@GetUser() user: User): User {
+    console.log(user);
+    return user;
   }
 }

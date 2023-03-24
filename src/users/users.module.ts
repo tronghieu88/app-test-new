@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { UsersResolver } from './users.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './user.entities';
-
+import { LoggerModule } from '../logger/logger.module';
 @Module({
   imports: [
     MongooseModule.forFeatureAsync([
@@ -18,7 +18,9 @@ import { User, UserSchema } from './user.entities';
         },
       },
     ]),
+    LoggerModule,
   ],
   providers: [UsersResolver, UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

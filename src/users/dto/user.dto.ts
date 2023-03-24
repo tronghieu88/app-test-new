@@ -1,11 +1,13 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, HideField, InputType } from '@nestjs/graphql';
 import { IUser } from '../user.interface';
 import {
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsStrongPassword,
   IsStrongPasswordOptions,
 } from 'class-validator';
+import { RegisterType } from 'src/constants/enum';
 
 const options: IsStrongPasswordOptions = {
   minLength: 3,
@@ -39,4 +41,23 @@ export class UserInput implements IUser {
 
   @Field(() => String, { nullable: true })
   description: string;
+}
+
+@InputType()
+export class FilterGetOneUser implements Partial<IUser> {
+  @Field({ nullable: true })
+  _id?: string;
+
+  @Field({ nullable: true })
+  slug?: string;
+
+  @IsOptional()
+  @Field({ nullable: true })
+  userName?: string;
+
+  @HideField()
+  registerType?: RegisterType;
+
+  @HideField()
+  resetPasswordCode?: string;
 }
