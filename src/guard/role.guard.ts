@@ -7,12 +7,14 @@ import {
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
-import { User } from 'src/users/user.entities';
+import { User } from 'src/users/entities/user.entities';
 
 @Injectable()
-export class GqlAuthGuard implements CanActivate {
+export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
     const ctx = GqlExecutionContext.create(context);
 
     const roles = this.reflector.get<string[]>('roles', ctx.getHandler());
@@ -22,19 +24,12 @@ export class GqlAuthGuard implements CanActivate {
     }
     const request = ctx.getContext().req;
     const user: User = request.user;
-    // if (!roles.some((role) => user?.role.includes(role))) {
-    //   console.log('Ban');
-    //   throw new ForbiddenException('Forbidden resource');
-    // }
-    // your guard logic here
-    console.log(
-      roles.some((role) => {
-        user?.role.includes(role);
-        console.log(roles);
-      }),
-    );
-    console.log('User ' + user);
-    console.log('Guard');
-    return true; // allow access for demonstration purposes
+    // console.log(user);
+
+    if (!roles.some((role) => user?.role.includes(role))) {
+      throw new ForbiddenException('Only for ADMIN');
+    }
+
+    return true;
   }
 }

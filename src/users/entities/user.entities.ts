@@ -5,7 +5,7 @@ import { IsEmail, IsPhoneNumber } from 'class-validator';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { RoleEnum } from 'src/constants/enum';
 
-import { IUser } from './user.interface';
+import { IUser } from '../interfaces/user.interface';
 
 export type UserDocument = HydratedDocument<User>;
 // ObjectType: de tra ve cac gia tri cho api
@@ -73,7 +73,9 @@ export class User implements IUser {
   @Field()
   slug?: string;
 
-  @HideField()
+  // @HideField()
+  @Prop({ String, default: RoleEnum.USER })
+  @Field()
   role?: RoleEnum;
 }
 

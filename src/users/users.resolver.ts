@@ -1,10 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserInput } from './dto/user.dto';
-import { User, UserResult } from './user.entities';
+import { User, UserResult } from './entities/user.entities';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from 'src/guard/role.guard';
+import { RolesGuard } from 'src/guard/role.guard';
 import { hasRoles } from 'src/constants/roles.deco';
 import { RoleEnum } from 'src/constants/enum';
 import { LoginAccessGuard } from 'src/guard/loginAccess.guard';
@@ -32,7 +32,8 @@ export class UsersResolver {
   }
 
   @Query(() => UserResult)
-  @UseGuards(LoginAccessGuard)
+  @UseGuards(LoginAccessGuard, RolesGuard)
+  @hasRoles(RoleEnum.ADMIN)
   // @hasRoles(RoleEnum.ADMIN)
   async getAllUser(): Promise<UserResult> {
     return await this.usersService.getAll();
@@ -67,6 +68,8 @@ export class UsersResolver {
   }
 
   @Query(() => UserResult)
+  @UseGuards(LoginAccessGuard, RolesGuard)
+  @hasRoles(RoleEnum.ADMIN)
   async sortUserName(
     @Args({
       name: 'option',
@@ -81,7 +84,7 @@ export class UsersResolver {
   @Query(() => User)
   @UseGuards(LoginAccessGuard)
   getCurrentUser(@GetUser() user: User): User {
-    console.log(user);
+    // console.log(user);
     return user;
   }
 }

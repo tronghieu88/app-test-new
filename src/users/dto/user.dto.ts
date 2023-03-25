@@ -1,5 +1,5 @@
-import { Field, HideField, InputType } from '@nestjs/graphql';
-import { IUser } from '../user.interface';
+import { Field, HideField, InputType, registerEnumType } from '@nestjs/graphql';
+import { IUser } from '../interfaces/user.interface';
 import {
   IsNotEmpty,
   IsOptional,
@@ -7,7 +7,7 @@ import {
   IsStrongPassword,
   IsStrongPasswordOptions,
 } from 'class-validator';
-import { RegisterType } from 'src/constants/enum';
+import { RegisterType, RoleEnum } from 'src/constants/enum';
 
 const options: IsStrongPasswordOptions = {
   minLength: 3,
@@ -16,7 +16,7 @@ const options: IsStrongPasswordOptions = {
   minNumbers: 0,
   minSymbols: 0,
 };
-
+registerEnumType(RoleEnum, { name: 'RoleEnum' });
 //InputType: de nguoi dung api nhap
 @InputType()
 export class UserInput implements IUser {
@@ -41,6 +41,9 @@ export class UserInput implements IUser {
 
   @Field(() => String, { nullable: true })
   description: string;
+
+  @Field(() => RoleEnum, { nullable: true })
+  role: RoleEnum;
 }
 
 @InputType()

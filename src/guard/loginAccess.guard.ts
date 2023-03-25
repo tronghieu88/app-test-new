@@ -10,7 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class LoginAccessGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
-    console.log(ctx.getContext().req.user);
+
     return ctx.getContext().req;
   }
 
@@ -22,7 +22,7 @@ export class LoginAccessGuard extends AuthGuard('jwt') {
       }
       throw new UnauthorizedException(err);
     }
-    console.log('---user---' + user);
+    // console.log('---user---' + user);
     return user;
   }
 }

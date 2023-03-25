@@ -11,7 +11,7 @@ import { LoginInput } from 'src/auth/dto/auth.dto';
 import { LoggerService } from 'src/logger/logger.service';
 import { throwIfNotExists } from 'src/utils/model.utils';
 import { FilterGetOneUser, UserInput } from './dto/user.dto';
-import { User, UserDocument, UserResult } from './user.entities';
+import { User, UserDocument, UserResult } from './entities/user.entities';
 
 @Injectable()
 export class UsersService {
@@ -81,6 +81,7 @@ export class UsersService {
           phoneNumber: userInput.phoneNumber,
           age: userInput.age,
           description: userInput.description,
+          role: userInput.role,
         },
       },
       {

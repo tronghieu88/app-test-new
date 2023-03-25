@@ -20,6 +20,7 @@ type User {
   keyword: String!
   updatedAt: DateTime!
   slug: String!
+  role: String!
 }
 
 """
@@ -61,6 +62,12 @@ input UserInput {
   phoneNumber: String
   age: Float
   description: String
+  role: RoleEnum
+}
+
+enum RoleEnum {
+  USER
+  ADMIN
 }
 
 input LoginInput {
