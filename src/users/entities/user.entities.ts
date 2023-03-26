@@ -25,7 +25,7 @@ export class User implements IUser {
   @Field(() => ID)
   _id?: mongoose.Types.ObjectId;
 
-  @Prop(String)
+  @Prop({ required: true, unique: true })
   @Field()
   userName: string;
 

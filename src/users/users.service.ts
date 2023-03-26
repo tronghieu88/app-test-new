@@ -1,7 +1,9 @@
 import {
+  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -21,7 +23,16 @@ export class UsersService {
   ) {}
 
   async create(userInput: UserInput): Promise<User> {
-    return await this.userModel.create(userInput);
+    try {
+      return await this.userModel.create(userInput);
+    } catch (error) {
+      // Xử lý lỗi nếu trường "userName" bị trùng lặp
+      if (error.code === 11000 && error.keyValue.userName) {
+        throw new ConflictException('Username đã tồn tại!');
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
   async findOne(userName: string): Promise<User | null> {
