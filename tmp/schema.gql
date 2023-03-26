@@ -68,6 +68,7 @@ input UserInput {
 enum RoleEnum {
   USER
   ADMIN
+  Guest
 }
 
 input LoginInput {

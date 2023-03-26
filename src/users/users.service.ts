@@ -137,7 +137,7 @@ export class UsersService {
   async signIn(input: LoginInput): Promise<User> {
     try {
       const user = await this.getOne({ userName: input.userName });
-      throwIfNotExists(user, 'Tài khoản không chính xác');
+      throwIfNotExists(user, 'Tài khoản không tồn tại!');
       // console.log('user++++' + user);
       // console.log('compar ' + input.password + ' = ' + user.password);
       await this.isNotCorrectPassword(input.password, user.password);

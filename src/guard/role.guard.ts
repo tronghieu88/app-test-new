@@ -24,10 +24,11 @@ export class RolesGuard implements CanActivate {
     }
     const request = ctx.getContext().req;
     const user: User = request.user;
-    // console.log(user);
-
+    // console.log('user--' + user);
+    // console.log('roles--' + roles);
+    const newRoles = roles;
     if (!roles.some((role) => user?.role.includes(role))) {
-      throw new ForbiddenException('Only for ADMIN');
+      throw new ForbiddenException('Only for ' + newRoles);
     }
 
     return true;

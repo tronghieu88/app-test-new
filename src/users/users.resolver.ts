@@ -32,8 +32,7 @@ export class UsersResolver {
   }
 
   @Query(() => UserResult)
-  @UseGuards(LoginAccessGuard, RolesGuard)
-  @hasRoles(RoleEnum.ADMIN)
+
   // @hasRoles(RoleEnum.ADMIN)
   async getAllUser(): Promise<UserResult> {
     return await this.usersService.getAll();
