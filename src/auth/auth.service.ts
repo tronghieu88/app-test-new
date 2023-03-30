@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { LoginInput } from './dto/auth.dto';
@@ -9,6 +10,7 @@ export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async generateTokens(_id: string): Promise<JwtPayload> {
@@ -16,15 +18,31 @@ export class AuthService {
       this.jwtService.signAsync(
         { _id },
         {
-          secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-          expiresIn: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
+          // secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+          secret: this.configService.get<string>(
+            'token.JWT_ACCESS_TOKEN_SECRET',
+          ),
+          // expiresIn: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
+          expiresIn: parseInt(
+            this.configService.get<string>(
+              'token.JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+            ),
+          ),
         },
       ),
       this.jwtService.signAsync(
         { _id },
         {
-          secret: process.env.JWT_REFRESH_TOKEN_SECRET,
-          expiresIn: parseInt(process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME),
+          // secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+          secret: this.configService.get<string>(
+            'token.JWT_REFRESH_TOKEN_SECRET',
+          ),
+          // expiresIn: parseInt(process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME),
+          expiresIn: parseInt(
+            this.configService.get<string>(
+              'token.JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+            ),
+          ),
         },
       ),
     ]);

@@ -5,9 +5,10 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAccessGuard } from 'src/guard/loginAccess.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule],
+  imports: [UsersModule, ConfigModule],
   providers: [
     AuthResolver,
     AuthService,

@@ -6,9 +6,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { LoggerModule } from './logger/logger.module';
 import { AuthModule } from './auth/auth.module';
-import mongoose from 'mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import variable from './configs/env.variable';
+import { MongooseConfigService } from './configs/mongodb.config';
 
-mongoose.set('debug', process.env.NODE_ENV === 'prod' ? false : true);
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -16,9 +17,13 @@ mongoose.set('debug', process.env.NODE_ENV === 'prod' ? false : true);
       autoSchemaFile: join(process.cwd(), './tmp/schema.gql'),
     }),
     UsersModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/testnestjsnew'),
+
+    MongooseModule.forRootAsync({
+      useClass: MongooseConfigService,
+    }),
     LoggerModule,
     AuthModule,
+    ConfigModule.forRoot({ load: [variable], isGlobal: true }),
   ],
   controllers: [],
   providers: [],

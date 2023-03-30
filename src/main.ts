@@ -1,15 +1,18 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as passport from 'passport';
+
 import { LoggerService } from './logger/logger.service';
 import 'dotenv/config';
+import { ConfigService } from '@nestjs/config';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // app.useGlobalPipes(new ValidationPipe());
-  // app.use(passport.initialize()); // Đăng ký middleware PassportJS
+
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('port');
+
   app.useLogger(new LoggerService());
-  console.log('App running at: ' + process.env.PORT);
-  await app.listen(process.env.PORT);
+  console.log('App running at: ' + port);
+  await app.listen(port);
 }
 bootstrap();
