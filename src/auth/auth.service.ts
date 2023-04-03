@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { LoginInput } from './dto/auth.dto';
+import { randomCode } from 'src/utils/utils';
+import { LoginInput, RegisterInput } from './dto/auth.dto';
 import { JwtPayload } from './entities/auth.entities';
 
 @Injectable()
@@ -59,4 +60,18 @@ export class AuthService {
       throw error;
     }
   }
+
+  // async signUp(register: RegisterInput): Promise<boolean> {
+  //   const code = randomCode();
+
+  //    this.userService.signUp(register)
+
+  //   const html = MailVerifyAccount.createHTML(code.toString());
+  //   await this.mailService.sendMail(
+  //     user.email,
+  //     Constants.VERIFY_ACCOUNT_SUBJECT,
+  //     html,
+  //   );
+  //   return true;
+  // }
 }

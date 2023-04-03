@@ -1,7 +1,7 @@
 export enum RoleEnum {
   USER = 'USER',
   ADMIN = 'ADMIN',
-  Guest = 'Guest',
+  GUEST = 'GUEST',
 }
 export enum RegisterType {
   GOOGLE = 'Google',

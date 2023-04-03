@@ -23,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: IJwtPayload): Promise<User> {
     try {
       const user = await this.userService.findOneFilter({ _id: payload._id });
+      // console.log(payload);
       if (!user) {
         throw new UnauthorizedException('Jwt not accepted!');
       }

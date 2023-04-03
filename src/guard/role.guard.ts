@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const ctx = GqlExecutionContext.create(context);
-
+    // console.log(ctx.getContext().req.user);
     const roles = this.reflector.get<string[]>('roles', ctx.getHandler());
 
     if (!roles) {
@@ -24,11 +24,10 @@ export class RolesGuard implements CanActivate {
     }
     const request = ctx.getContext().req;
     const user: User = request.user;
-    // console.log('user--' + user);
-    // console.log('roles--' + roles);
+
     const newRoles = roles;
     if (!roles.some((role) => user?.role.includes(role))) {
-      throw new ForbiddenException('Only for ' + newRoles);
+      throw new ForbiddenException('Only for ' + newRoles.join(', '));
     }
 
     return true;

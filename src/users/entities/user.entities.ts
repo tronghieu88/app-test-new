@@ -25,19 +25,19 @@ export class User implements IUser {
   @Field(() => ID)
   _id?: mongoose.Types.ObjectId;
 
-  @Prop({ required: true, unique: true })
+  @IsEmail()
   @Field()
-  userName: string;
+  @Prop({ required: true })
+  email: string;
 
-  @Prop(String)
+  @Prop({ required: true })
   @Field()
   // @HideField()
   password: string;
 
-  @IsEmail()
   @Prop(String)
   @Field({ nullable: true })
-  email?: string;
+  userName?: string;
 
   @IsPhoneNumber('VN')
   @Prop(String)

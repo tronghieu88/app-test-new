@@ -11,7 +11,8 @@ import { LoggerModule } from '../logger/logger.module';
         name: User.name,
         useFactory: () => {
           const schema = UserSchema;
-          schema.pre(/^find/, function () {
+          // schema.pre(/^find/, function () {
+          schema.pre('find', function () {
             this.find({ isDeleted: { $ne: true } });
           });
           return schema;

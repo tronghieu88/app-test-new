@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpException,
   HttpStatus,
@@ -7,12 +8,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-
+import * as bcrypt from 'bcrypt';
 import { FilterQuery, Model, UpdateQuery } from 'mongoose';
-import { LoginInput } from 'src/auth/dto/auth.dto';
+import { LoginInput, RegisterInput } from 'src/auth/dto/auth.dto';
 import { LoggerService } from 'src/logger/logger.service';
-import { throwIfNotExists } from 'src/utils/model.utils';
-import { FilterGetOneUser, UserInput } from './dto/user.dto';
+import { throwIfExisted, throwIfNotExists } from 'src/utils/model.utils';
+import { FilterGetOneUser, UpdateCurrentUser, UserInput } from './dto/user.dto';
 import { User, UserDocument, UserResult } from './entities/user.entities';
 
 @Injectable()
@@ -20,29 +21,27 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private loggerService: LoggerService,
-  ) {}
+  ) {
+    this.loggerService.setContext('UserService');
+  }
 
   async create(userInput: UserInput): Promise<User> {
-    try {
-      return await this.userModel.create(userInput);
-    } catch (error) {
-      // Xử lý lỗi nếu trường "userName" bị trùng lặp
-      if (error.code === 11000 && error.keyValue.userName) {
-        throw new ConflictException('Username đã tồn tại!');
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+    const userExist = await this.userModel.findOne({ email: userInput.email });
+    // if (userExist) {
+    //   console.log('type ' + userExist);
+    //   throw new ConflictException('Email đã tồn tại!');
+    // }
+    // console.log('exist ' + userExist);
+    throwIfExisted(userExist, 'Email đã tồn tại!');
+    const hashPassword = await this.hashPassword(userInput.password);
+    userInput.password = hashPassword;
+    return await this.userModel.create(userInput);
   }
 
   async findOne(userName: string): Promise<User | null> {
     const user = await this.userModel.findOne({ userName: userName });
-    // console.log(user);
-    if (user === null)
-      throw new HttpException(
-        'Không tìm thấy userName này!',
-        HttpStatus.NOT_FOUND,
-      );
+
+    throwIfNotExists(user, 'Không tìm thấy User!');
     return user;
   }
 
@@ -60,7 +59,7 @@ export class UsersService {
 
   async deleteOne(userInput: UserInput): Promise<Boolean> {
     const userUpdate = await this.userModel.findOneAndUpdate(
-      { userName: userInput.userName, password: userInput.password },
+      { email: userInput.email },
       { $set: { isDeleted: true } },
     );
     return userUpdate ? true : false;
@@ -81,14 +80,14 @@ export class UsersService {
   //   return userNew;
   // }
 
-  async updateOne(userName: string, userInput: UserInput): Promise<Boolean> {
+  async updateOne(email: string, userInput: UserInput): Promise<Boolean> {
     const userNew = await this.userModel.findOneAndUpdate(
-      { userName: userName },
+      { email: email },
       {
         $set: {
           userName: userInput.userName,
           password: userInput.password,
-          email: userInput.email,
+          email: email,
           phoneNumber: userInput.phoneNumber,
           age: userInput.age,
           description: userInput.description,
@@ -102,13 +101,41 @@ export class UsersService {
     return userNew ? true : false;
   }
 
+  async updateCurrentUser(
+    user: User,
+    updateCurrentUser: UpdateCurrentUser,
+  ): Promise<Boolean> {
+    // console.log(user);
+    const userNew = await this.userModel.findOneAndUpdate(
+      { email: user.email },
+      {
+        $set: {
+          userName: updateCurrentUser.userName,
+
+          phoneNumber: updateCurrentUser.phoneNumber,
+          age: updateCurrentUser.age,
+          description: updateCurrentUser.description,
+          role: updateCurrentUser.role,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+    return userNew ? true : false;
+  }
+
   async getAll(): Promise<UserResult> {
-    const [results, totalCount] = await Promise.all([
-      this.userModel.find(),
-      // this.userModel.countDocuments(),
-      this.userModel.find(),
-    ]);
-    return { results, totalCount: totalCount.length };
+    const results = await this.userModel.find();
+    const totalCount = results.length;
+    return { results, totalCount };
+    // const [results, totalCount] = await Promise.all([
+    //   this.userModel.find(),
+    //   // this.userModel.countDocuments(),
+    //   this.userModel.find(),
+    // ]);
+    // console.log('first');
+    // return { results, totalCount: totalCount.length };
   }
 
   async getAllAndSortUserName(option: number): Promise<UserResult> {
@@ -131,8 +158,19 @@ export class UsersService {
     password: string,
     currentPassword: string,
   ): Promise<void> {
-    if (password.toString() != currentPassword.toString()) {
+    const compare = await bcrypt.compare(password, currentPassword);
+    if (!compare) {
       throw new UnauthorizedException('Mật khẩu không chính xác');
+    }
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    try {
+      const salt = await bcrypt.genSalt();
+      const hashPassword = await bcrypt.hash(password, salt);
+      return hashPassword;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -147,7 +185,7 @@ export class UsersService {
 
   async signIn(input: LoginInput): Promise<User> {
     try {
-      const user = await this.getOne({ userName: input.userName });
+      const user = await this.getOne({ email: input.email });
       throwIfNotExists(user, 'Tài khoản không tồn tại!');
       // console.log('user++++' + user);
       // console.log('compar ' + input.password + ' = ' + user.password);
@@ -158,4 +196,18 @@ export class UsersService {
       throw error;
     }
   }
+
+  // async signUp(register: RegisterInput): Promise<User> {
+  //   try {
+  //     const { password, email } = register;
+  //     const userExisting = await this.getOne({ email });
+  //     if (userExisting) {
+  //       throw new BadRequestException('Email đã tồn tại');
+  //     }
+
+  //     return await this.userModel.create(register);
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

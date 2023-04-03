@@ -9,9 +9,9 @@ type UserResult {
 
 type User {
   _id: ID!
-  userName: String!
+  email: String!
   password: String!
-  email: String
+  userName: String
   phoneNumber: String
   age: Float
   description: String
@@ -49,16 +49,17 @@ type Query {
 
 type Mutation {
   testMutation: String!
-  createUser(userInput1: UserInput!): User!
+  createUser(userInput: UserInput!): User!
   deleteOne(Delete: UserInput): Boolean!
-  updateOne(userName: String!, userInput: UserInput!): Boolean!
+  updateOne(email: String!, userInput: UserInput!): Boolean!
+  updateCurrentUser(updateCurrentUser: UpdateCurrentUser!): Boolean!
   signIn(input: LoginInput!): JwtPayload!
 }
 
 input UserInput {
-  userName: String!
-  password: String!
   email: String
+  password: String
+  userName: String
   phoneNumber: String
   age: Float
   description: String
@@ -68,10 +69,18 @@ input UserInput {
 enum RoleEnum {
   USER
   ADMIN
-  Guest
+  GUEST
+}
+
+input UpdateCurrentUser {
+  userName: String
+  phoneNumber: String
+  age: Float
+  description: String
+  role: RoleEnum
 }
 
 input LoginInput {
-  userName: String!
+  email: String!
   password: String!
 }
