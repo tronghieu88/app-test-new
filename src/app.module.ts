@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import variable from './configs/env.variable';
 import { MongooseConfigService } from './configs/mongodb.config';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MongooseConfigService } from './configs/mongodb.config';
     LoggerModule,
     AuthModule,
     ConfigModule.forRoot({ load: [variable], isGlobal: true }),
+    MailModule,
   ],
   controllers: [],
   providers: [],

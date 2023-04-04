@@ -8,4 +8,6 @@ export interface IUser extends IEntity {
   age?: number;
   description?: string;
   role?: RoleEnum;
+  isConfirmMail?: boolean;
+  codeMail?: number;
 }

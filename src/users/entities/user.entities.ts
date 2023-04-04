@@ -27,10 +27,12 @@ export class User implements IUser {
 
   @IsEmail()
   @Field()
-  @Prop({ required: true })
+  // @Prop({ required: true })
+  @Prop(String)
   email: string;
 
-  @Prop({ required: true })
+  // @Prop({ required: true })
+  @Prop(String)
   @Field()
   // @HideField()
   password: string;
@@ -74,9 +76,17 @@ export class User implements IUser {
   slug?: string;
 
   // @HideField()
-  @Prop({ String, default: RoleEnum.USER })
+  @Prop({ String, default: RoleEnum.GUEST })
   @Field()
   role?: RoleEnum;
+
+  @Prop({ default: false })
+  @Field(() => Boolean)
+  isConfirmMail?: boolean;
+
+  @Prop(Number)
+  @Field({ nullable: true })
+  codeMail?: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

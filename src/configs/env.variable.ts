@@ -12,6 +12,16 @@ export default () => ({
     JWT_REFRESH_TOKEN_SECRET: 'refreshsecret',
     JWT_REFRESH_TOKEN_EXPIRATION_TIME: 6000,
   },
+  mail: {
+    EMAIL_ADDRESS: 'Trong Hieu <hieu@gmail.com>',
+    EMAIL_HOST: 'smtp.mailtrap.io',
+    EMAIL_USERNAME: '71e064d69635dc',
+    EMAIL_PASSWORD: 'b59a4f6c1e9c80',
+    EMAIL_PORT: 25,
+
+    JWT_VERIFICATION_EMAIL_TOKEN_SECRET: 'hahahaha',
+    JWT_VERIFICATION_EXPIRATION_TIME: '86400',
+  },
   //   database: {
   //     host: process.env.DB_HOST || 'localhost',
   //     port: parseInt(process.env.DB_PORT, 10) || 27017,

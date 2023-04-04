@@ -21,6 +21,8 @@ type User {
   updatedAt: DateTime!
   slug: String!
   role: String!
+  isConfirmMail: Boolean!
+  codeMail: Float
 }
 
 """
@@ -45,6 +47,7 @@ type Query {
     option: Float!
   ): UserResult!
   getCurrentUser: User!
+  confirmMail(email: String!, code: Float!): Boolean!
 }
 
 type Mutation {
@@ -54,6 +57,7 @@ type Mutation {
   updateOne(email: String!, userInput: UserInput!): Boolean!
   updateCurrentUser(updateCurrentUser: UpdateCurrentUser!): Boolean!
   signIn(input: LoginInput!): JwtPayload!
+  signUp(input: RegisterInput!): Boolean!
 }
 
 input UserInput {
@@ -83,4 +87,10 @@ input UpdateCurrentUser {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  confirmPassword: String!
 }

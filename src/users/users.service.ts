@@ -16,10 +16,13 @@ import { throwIfExisted, throwIfNotExists } from 'src/utils/model.utils';
 import { FilterGetOneUser, UpdateCurrentUser, UserInput } from './dto/user.dto';
 import { User, UserDocument, UserResult } from './entities/user.entities';
 
+type UserModelType = Model<User>;
+
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    // @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(User.name) private userModel: UserModelType,
     private loggerService: LoggerService,
   ) {
     this.loggerService.setContext('UserService');
@@ -79,6 +82,20 @@ export class UsersService {
   //     );
   //   return userNew;
   // }
+
+  async findOneAndUpdate(
+    filter: FilterQuery<User>,
+    update: UpdateQuery<User>,
+  ): Promise<User> {
+    try {
+      const user = await this.userModel.findOneAndUpdate(filter, update, {
+        new: true,
+      });
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async updateOne(email: string, userInput: UserInput): Promise<Boolean> {
     const userNew = await this.userModel.findOneAndUpdate(
@@ -197,17 +214,27 @@ export class UsersService {
     }
   }
 
-  // async signUp(register: RegisterInput): Promise<User> {
-  //   try {
-  //     const { password, email } = register;
-  //     const userExisting = await this.getOne({ email });
-  //     if (userExisting) {
-  //       throw new BadRequestException('Email đã tồn tại');
-  //     }
+  async signUp(register: RegisterInput): Promise<User> {
+    try {
+      if (register.password != register.confirmPassword) {
+        throw new BadRequestException('Mật khẩu không khớp');
+      }
 
-  //     return await this.userModel.create(register);
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+      const { password, email } = register;
+      const userExisting = await this.getOne({ email });
+
+      if (userExisting) {
+        throw new BadRequestException('Email đã tồn tại');
+      }
+
+      const [user, hashPassword] = await Promise.all([
+        this.userModel.create({ email }),
+        this.hashPassword(password),
+      ]);
+      user.password = hashPassword;
+      return user.save();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

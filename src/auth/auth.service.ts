@@ -5,6 +5,10 @@ import { UsersService } from 'src/users/users.service';
 import { randomCode } from 'src/utils/utils';
 import { LoginInput, RegisterInput } from './dto/auth.dto';
 import { JwtPayload } from './entities/auth.entities';
+import { LoggerService } from 'src/logger/logger.service';
+import { MailVerifyAccount } from 'src/mail/templates/mail.verify';
+import { MailService } from 'src/mail/mail.service';
+import { VerifyMailAccount } from 'src/mail/templates/verify.mail';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +16,11 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+    private loggerService: LoggerService,
+    private mailService: MailService,
+  ) {
+    this.loggerService.setContext('AuthService');
+  }
 
   async generateTokens(_id: string): Promise<JwtPayload> {
     const [accessToken, refreshToken] = await Promise.all([
@@ -61,17 +69,17 @@ export class AuthService {
     }
   }
 
-  // async signUp(register: RegisterInput): Promise<boolean> {
-  //   const code = randomCode();
+  async signUp(register: RegisterInput): Promise<boolean> {
+    const code = randomCode();
 
-  //    this.userService.signUp(register)
-
-  //   const html = MailVerifyAccount.createHTML(code.toString());
-  //   await this.mailService.sendMail(
-  //     user.email,
-  //     Constants.VERIFY_ACCOUNT_SUBJECT,
-  //     html,
-  //   );
-  //   return true;
-  // }
+    const user = await this.userService.signUp(register);
+    const email = user.email;
+    await this.userService.findOneAndUpdate(
+      { email },
+      { $set: { codeMail: code } },
+    );
+    const html = VerifyMailAccount.createHTML(code.toString());
+    await this.mailService.sendMail(user.email, 'Verify your account', html);
+    return true;
+  }
 }

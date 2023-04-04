@@ -46,6 +46,12 @@ export class UserInput implements IUser {
 
   @Field(() => RoleEnum, { nullable: true })
   role: RoleEnum;
+
+  // @Field(() => RoleEnum, { nullable: true })
+  // isConfirmMail: boolean;
+
+  // @Field(() => Number, { nullable: true })
+  // codeMail: number;
 }
 
 @InputType()
