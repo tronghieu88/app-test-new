@@ -66,7 +66,9 @@ export class MailService {
     if (user.isConfirmMail) {
       throw new BadRequestException('Email đã được xác thực');
     }
-
+    if (user.codeMail !== code) {
+      throw new BadRequestException('Code đã nhập không chính xác!');
+    }
     await this.userService.findOneAndUpdate(
       { email },
       { $set: { isConfirmMail: true } },

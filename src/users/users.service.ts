@@ -204,6 +204,11 @@ export class UsersService {
     try {
       const user = await this.getOne({ email: input.email });
       throwIfNotExists(user, 'Tài khoản không tồn tại!');
+      if (!user.isConfirmMail) {
+        throw new UnauthorizedException(
+          'Email chưa được xác nhận. Vui lòng xác nhận email của bạn',
+        );
+      }
       // console.log('user++++' + user);
       // console.log('compar ' + input.password + ' = ' + user.password);
       await this.isNotCorrectPassword(input.password, user.password);
