@@ -38,7 +38,7 @@ export class User implements IUser {
   @Field()
   // @Prop({ required: true })
   @Prop(String)
-  email: string;
+  mail: string;
 
   // @Prop({ required: true })
   @Prop(String)
@@ -48,7 +48,7 @@ export class User implements IUser {
 
   @Prop({
     default: function () {
-      return this.email.split('@')[0];
+      return this.mail.split('@')[0];
     },
   })
   @Field({ nullable: true })
@@ -99,7 +99,7 @@ export class User implements IUser {
 
   @Prop(Number)
   @Field({ nullable: true })
-  codeMail?: number;
+  codeMail?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

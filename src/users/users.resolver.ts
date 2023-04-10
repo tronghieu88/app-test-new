@@ -6,7 +6,11 @@ import {
   Query,
   Resolver,
 } from '@nestjs/graphql';
-import { UpdateCurrentUser, UserInput } from './dto/user.dto';
+import {
+  ChangePasswordInput,
+  UpdateCurrentUser,
+  UserInput,
+} from './dto/user.dto';
 import { User, UserOTP, UserResult } from './entities/user.entities';
 import { UsersService } from './users.service';
 
@@ -131,6 +135,15 @@ export class UsersResolver {
     // return true;
     console.log('---------------');
     console.log(session.session);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async onlyChangePassword(
+    @Args({ name: 'input', type: () => ChangePasswordInput })
+    input: ChangePasswordInput,
+  ) {
+    await this.usersService.onlyChangePassword(input);
     return true;
   }
 }

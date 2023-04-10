@@ -8,7 +8,7 @@ export class MailResolver {
   @Query(() => Boolean)
   confirmMail(
     @Args('email') email: string,
-    @Args('code') code: number,
+    @Args('code') code: string,
   ): Promise<boolean> {
     return this.mailService.confirmEmail(email, code);
   }

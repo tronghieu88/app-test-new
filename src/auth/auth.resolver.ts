@@ -5,6 +5,8 @@ import { JwtPayload } from './entities/auth.entities';
 import { UseGuards } from '@nestjs/common';
 import { LoginAccessGuard } from 'src/guard/loginAccess.guard';
 import { Session } from 'src/decorators/session.decorator';
+import { async } from 'rxjs';
+import session from 'express-session';
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -33,5 +35,34 @@ export class AuthResolver {
     } catch (error) {
       throw error;
     }
+  }
+
+  @Query(() => Boolean)
+  async forgotPassword(
+    @Args({ name: 'mail', type: () => String }) mail: string,
+    @Session() session,
+  ): Promise<boolean> {
+    try {
+      await this.authService.forgotPassword(mail, session);
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Mutation(() => Boolean)
+  async changePassword(
+    @Session() session,
+    @Args({ name: 'code', type: () => String }) code: string,
+    @Args({ name: 'newPassword', type: () => String }) newPassword: string,
+    @Args({ name: 'reNewPassword', type: () => String }) reNewPassword: string,
+  ): Promise<boolean> {
+    await this.authService.changePassword(
+      session,
+      code,
+      newPassword,
+      reNewPassword,
+    );
+    return true;
   }
 }

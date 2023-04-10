@@ -1,7 +1,7 @@
 import { RoleEnum } from 'src/constants/enum';
 
 export interface IUser extends IEntity {
-  email: string;
+  mail: string;
   password: string;
   userName?: string;
   phoneNumber?: string;
@@ -9,5 +9,5 @@ export interface IUser extends IEntity {
   description?: string;
   role?: RoleEnum;
   isConfirmMail?: boolean;
-  codeMail?: number;
+  codeMail?: string;
 }

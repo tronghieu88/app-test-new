@@ -57,8 +57,8 @@ export class MailService {
     return token;
   }
 
-  async confirmEmail(email: string, code: number): Promise<boolean> {
-    const user = await this.userService.getOne({ email });
+  async confirmEmail(mail: string, code: string): Promise<boolean> {
+    const user = await this.userService.getOne({ mail });
 
     if (!user) {
       throw new UnauthorizedException("This token can't use with email");
@@ -70,7 +70,7 @@ export class MailService {
       throw new BadRequestException('Code đã nhập không chính xác!');
     }
     await this.userService.findOneAndUpdate(
-      { email },
+      { mail },
       { $set: { isConfirmMail: true } },
     );
 

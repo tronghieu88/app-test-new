@@ -15,13 +15,13 @@ import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { LoginInput, RegisterInput } from 'src/auth/dto/auth.dto';
 import { LoggerService } from 'src/logger/logger.service';
 import { throwIfExisted, throwIfNotExists } from 'src/utils/model.utils';
-import { FilterGetOneUser, UpdateCurrentUser, UserInput } from './dto/user.dto';
+import {
+  ChangePasswordInput,
+  FilterGetOneUser,
+  UpdateCurrentUser,
+  UserInput,
+} from './dto/user.dto';
 import { User, UserDocument, UserResult } from './entities/user.entities';
-import { Context } from '@nestjs/graphql';
-import { randomCode } from 'src/utils/utils';
-import { AuthService } from 'src/auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 
 type UserModelType = Model<User>;
 
@@ -37,13 +37,13 @@ export class UsersService {
   }
 
   async create(userInput: UserInput): Promise<User> {
-    const userExist = await this.userModel.findOne({ email: userInput.email });
+    const userExist = await this.userModel.findOne({ mail: userInput.mail });
     // if (userExist) {
     //   console.log('type ' + userExist);
-    //   throw new ConflictException('Email đã tồn tại!');
+    //   throw new ConflictException('mail đã tồn tại!');
     // }
     // console.log('exist ' + userExist);
-    throwIfExisted(userExist, 'Email đã tồn tại!');
+    throwIfExisted(userExist, 'Mail đã tồn tại!');
     const hashPassword = await this.hashPassword(userInput.password);
     userInput.password = hashPassword;
     return await this.userModel.create(userInput);
@@ -70,7 +70,7 @@ export class UsersService {
 
   async deleteOne(userInput: UserInput): Promise<Boolean> {
     const userUpdate = await this.userModel.findOneAndUpdate(
-      { email: userInput.email },
+      { mail: userInput.mail },
       { $set: { isDeleted: true } },
     );
     return userUpdate ? true : false;
@@ -105,14 +105,14 @@ export class UsersService {
     }
   }
 
-  async updateOne(email: string, userInput: UserInput): Promise<Boolean> {
+  async updateOne(mail: string, userInput: UserInput): Promise<Boolean> {
     const userNew = await this.userModel.findOneAndUpdate(
-      { email: email },
+      { mail: mail },
       {
         $set: {
           userName: userInput.userName,
           password: userInput.password,
-          email: email,
+          mail: mail,
           phoneNumber: userInput.phoneNumber,
           age: userInput.age,
           description: userInput.description,
@@ -132,7 +132,7 @@ export class UsersService {
   ): Promise<Boolean> {
     // console.log(user);
     const userNew = await this.userModel.findOneAndUpdate(
-      { email: user.email },
+      { mail: user.mail },
       {
         $set: {
           userName: updateCurrentUser.userName,
@@ -210,11 +210,11 @@ export class UsersService {
 
   async signIn(input: LoginInput): Promise<User> {
     try {
-      const user = await this.getOne({ email: input.email });
+      const user = await this.getOne({ mail: input.mail });
       throwIfNotExists(user, 'Tài khoản không tồn tại!');
       if (!user.isConfirmMail) {
         throw new UnauthorizedException(
-          'Email chưa được xác nhận. Vui lòng xác nhận email của bạn',
+          'Mail chưa được xác nhận. Vui lòng xác nhận mail của bạn',
         );
       }
       // console.log('user++++' + user);
@@ -227,26 +227,26 @@ export class UsersService {
     }
   }
 
-  // async signUp(register: RegisterInput): Promise<User> {
-  async signUp(email: string, password: string, code): Promise<User> {
+  async signUp(register: RegisterInput, code: string): Promise<User> {
+    // async signUp(mail: string, password: string, code): Promise<User> {
     try {
       // if (register.password != register.confirmPassword) {
       //   throw new BadRequestException('Mật khẩu không khớp');
       // }
 
-      // const { password, email } = register;
-      // const userExisting = await this.getOne({ email });
+      // const { password, mail } = register;
+      // const userExisting = await this.getOne({ mail });
 
       // if (userExisting) {
-      //   throw new BadRequestException('Email đã tồn tại');
+      //   throw new BadRequestException('mail đã tồn tại');
       // }
 
       const [user, hashPassword] = await Promise.all([
-        this.userModel.create({ email }),
-        this.hashPassword(password),
+        this.userModel.create(register),
+        this.hashPassword(register.password),
       ]);
       user.password = hashPassword;
-      // const mail = user.email;
+      // const mail = user.mail;
       // await this.findOneAndUpdate({ mail }, { $set: { isConfirmMail: true } });
       // await this.findOneAndUpdate({ mail }, { $set: { codeMail: code } });
       user.isConfirmMail = true;
@@ -265,8 +265,8 @@ export class UsersService {
 
     // if (session.mailotp.code === code) {
     //   const user = await this.signUp(session.mailotp);
-    //   const email = user.email;
-    //   await this.findOneAndUpdate({ email }, { $set: { codeMail: code } });
+    //   const mail = user.mail;
+    //   await this.findOneAndUpdate({ mail }, { $set: { codeMail: code } });
     // }
     // console.log(session.mailotp);
     if (session.mailotp === undefined) {
@@ -277,6 +277,39 @@ export class UsersService {
       throw new BadRequestException('OTP không khớp!');
     }
     const mail = session.mailotp;
-    await this.signUp(mail.mail, mail.pass, mail.code);
+    await this.signUp(mail, mail.code);
+  }
+
+  async onlyChangePassword(input: ChangePasswordInput) {
+    try {
+      const { mail, curentPassword, newPassword, reNewPassword } = input;
+
+      const user = await this.getOne({ mail });
+      throwIfNotExists(user, 'Tài khoản không tồn tại!');
+
+      await this.isNotCorrectPassword(curentPassword, user.password);
+
+      await this.changePassword(mail, newPassword, reNewPassword);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async changePassword(
+    mail: string,
+    newPassword: string,
+    reNewPassword: string,
+  ) {
+    if (newPassword != reNewPassword) {
+      throw new BadRequestException('Mật khẩu đã nhập không khớp!');
+    }
+
+    const [user, hashPassword] = await Promise.all([
+      this.userModel.findOne({ mail }),
+      this.hashPassword(newPassword),
+    ]);
+    user.password = hashPassword;
+
+    return user.save();
   }
 }

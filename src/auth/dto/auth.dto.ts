@@ -4,7 +4,7 @@ import { IsEmail } from 'class-validator';
 @InputType()
 export class LoginInput {
   @Field()
-  email: string;
+  mail: string;
 
   @Field()
   password: string;
@@ -14,11 +14,17 @@ export class LoginInput {
 export class RegisterInput {
   @IsEmail()
   @Field()
-  email: string;
+  mail: string;
 
   @Field()
   password: string;
 
   @Field()
   confirmPassword: string;
+
+  @Field({ nullable: true })
+  userName: string;
+
+  @Field({ nullable: true })
+  phoneNumber: string;
 }

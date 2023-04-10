@@ -9,7 +9,7 @@ type UserResult {
 
 type User {
   _id: ID!
-  email: String!
+  mail: String!
   password: String!
   userName: String
   phoneNumber: String
@@ -22,7 +22,7 @@ type User {
   slug: String!
   role: String!
   isConfirmMail: Boolean!
-  codeMail: Float
+  codeMail: String
 }
 
 """
@@ -48,7 +48,8 @@ type Query {
   ): UserResult!
   getCurrentUser: User!
   getSession: Boolean!
-  confirmMail(email: String!, code: Float!): Boolean!
+  forgotPassword(mail: String!): Boolean!
+  confirmMail(email: String!, code: String!): Boolean!
 }
 
 type Mutation {
@@ -58,12 +59,14 @@ type Mutation {
   updateOne(email: String!, userInput: UserInput!): Boolean!
   updateCurrentUser(updateCurrentUser: UpdateCurrentUser!): Boolean!
   confirmCode(code: String!): Boolean!
+  onlyChangePassword(input: ChangePasswordInput!): Boolean!
   signIn(input: LoginInput!): JwtPayload!
   signUp(input: RegisterInput!): Boolean!
+  changePassword(code: String!, newPassword: String!, reNewPassword: String!): Boolean!
 }
 
 input UserInput {
-  email: String
+  mail: String
   password: String
   userName: String
   phoneNumber: String
@@ -86,13 +89,22 @@ input UpdateCurrentUser {
   role: RoleEnum
 }
 
+input ChangePasswordInput {
+  mail: String!
+  curentPassword: String!
+  newPassword: String!
+  reNewPassword: String!
+}
+
 input LoginInput {
-  email: String!
+  mail: String!
   password: String!
 }
 
 input RegisterInput {
-  email: String!
+  mail: String!
   password: String!
   confirmPassword: String!
+  userName: String
+  phoneNumber: String
 }

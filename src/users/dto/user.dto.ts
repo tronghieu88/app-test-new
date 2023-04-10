@@ -24,7 +24,7 @@ export class UserInput implements IUser {
   @IsNotEmpty()
   @IsEmail()
   @Field(() => String, { nullable: true })
-  email: string;
+  mail: string;
 
   // @IsStrongPassword(options)
   // @IsNotEmpty()
@@ -69,7 +69,7 @@ export class FilterGetOneUser implements Partial<IUser> {
   @IsEmail()
   @IsOptional()
   @Field({ nullable: true })
-  email?: string;
+  mail?: string;
 
   @HideField()
   registerType?: RegisterType;
@@ -95,4 +95,27 @@ export class UpdateCurrentUser implements Partial<IUser> {
 
   @Field(() => RoleEnum, { nullable: true })
   role: RoleEnum;
+}
+
+@InputType()
+export class ChangePasswordInput implements Partial<IUser> {
+  @IsNotEmpty()
+  @IsEmail()
+  @Field(() => String)
+  mail: string;
+
+  // @IsStrongPassword(options)
+  // @IsNotEmpty()
+  @Field(() => String)
+  curentPassword: string;
+
+  // @IsStrongPassword(options)
+  // @IsNotEmpty()
+  @Field(() => String)
+  newPassword: string;
+
+  // @IsStrongPassword(options)
+  // @IsNotEmpty()
+  @Field(() => String)
+  reNewPassword: string;
 }
