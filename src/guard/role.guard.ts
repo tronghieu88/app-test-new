@@ -23,6 +23,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const request = ctx.getContext().req;
+    console.log(request.session);
     const user: User = request.user;
 
     const newRoles = roles;

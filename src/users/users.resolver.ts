@@ -1,14 +1,22 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  GqlExecutionContext,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import { UpdateCurrentUser, UserInput } from './dto/user.dto';
-import { User, UserResult } from './entities/user.entities';
+import { User, UserOTP, UserResult } from './entities/user.entities';
 import { UsersService } from './users.service';
 
-import { UseGuards } from '@nestjs/common';
+import { ExecutionContext, Req, UseGuards } from '@nestjs/common';
 import { RolesGuard } from 'src/guard/role.guard';
 import { hasRoles } from 'src/constants/roles.deco';
 import { RoleEnum } from 'src/constants/enum';
 import { LoginAccessGuard } from 'src/guard/loginAccess.guard';
 import { GetUser } from 'src/decorators/getuser.decorators';
+import { Session } from 'src/decorators/session.decorator';
 
 @Resolver('User')
 export class UsersResolver {
@@ -96,10 +104,33 @@ export class UsersResolver {
     return userNew;
   }
 
+  // @UseGuards(LocalAccessGuard)
+  @Mutation(() => Boolean)
+  async confirmCode(
+    @Args({ name: 'code', type: () => String }) code: string,
+    @Session() session,
+  ) {
+    await this.usersService.confirmCode(session, code);
+    return true;
+  }
+
   @Query(() => User)
   @UseGuards(LoginAccessGuard)
   getCurrentUser(@GetUser() user: User): User {
     // console.log(user);
     return user;
+  }
+
+  // @UseGuards(LocalAccessGuard)
+  @Query(() => Boolean)
+  async getSession(@Session() session) {
+    // const { req } = context;
+    // const session = context.req.session;
+    // console.log(session);
+    // req.session.additionalData = 'additional data';
+    // return true;
+    console.log('---------------');
+    console.log(session.session);
+    return true;
   }
 }

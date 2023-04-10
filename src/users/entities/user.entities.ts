@@ -18,6 +18,15 @@ export class UserResult implements IResult<User> {
   totalCount: number;
 }
 
+@ObjectType()
+export class UserOTP {
+  @Field(() => String)
+  mail: string;
+
+  @Field(() => Number)
+  code: number;
+}
+
 @Schema()
 @ObjectType()
 export class User implements IUser {
@@ -37,7 +46,11 @@ export class User implements IUser {
   // @HideField()
   password: string;
 
-  @Prop(String)
+  @Prop({
+    default: function () {
+      return this.email.split('@')[0];
+    },
+  })
   @Field({ nullable: true })
   userName?: string;
 

@@ -1,5 +1,5 @@
 export class VerifyMailAccount {
-  static createHTML(otp: string): string {
+  static createHTML(otp: string, link: string): string {
     return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
   xmlns="http://www.w3.org/1999/xhtml"
@@ -1094,6 +1094,13 @@ END CONFIG STYLES
                                               align="left"
                                               class="esd-block-text"
                                             >
+                                            <a
+                                                rel="stylesheet"
+                                                href="${link}"
+                                                target="_blank"
+                                                >Nhấn vào đây để xác nhận nhanh
+                                                tài khoản!</a
+                                              >
                                               <p>Thanks,<br />Tech Shop</p>
                                             </td>
                                           </tr>

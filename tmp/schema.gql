@@ -47,6 +47,7 @@ type Query {
     option: Float!
   ): UserResult!
   getCurrentUser: User!
+  getSession: Boolean!
   confirmMail(email: String!, code: Float!): Boolean!
 }
 
@@ -56,6 +57,7 @@ type Mutation {
   deleteOne(Delete: UserInput): Boolean!
   updateOne(email: String!, userInput: UserInput!): Boolean!
   updateCurrentUser(updateCurrentUser: UpdateCurrentUser!): Boolean!
+  confirmCode(code: String!): Boolean!
   signIn(input: LoginInput!): JwtPayload!
   signUp(input: RegisterInput!): Boolean!
 }

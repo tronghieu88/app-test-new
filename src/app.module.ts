@@ -16,6 +16,7 @@ import { MailModule } from './mail/mail.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), './tmp/schema.gql'),
+      context: ({ req }) => ({ session: req.session }),
     }),
     UsersModule,
 
@@ -27,7 +28,7 @@ import { MailModule } from './mail/mail.module';
     ConfigModule.forRoot({ load: [variable], isGlobal: true }),
     MailModule,
   ],
-  controllers: [],
+
   providers: [],
 })
 export class AppModule {}

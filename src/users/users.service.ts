@@ -3,9 +3,11 @@ import {
   ConflictException,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
@@ -15,6 +17,11 @@ import { LoggerService } from 'src/logger/logger.service';
 import { throwIfExisted, throwIfNotExists } from 'src/utils/model.utils';
 import { FilterGetOneUser, UpdateCurrentUser, UserInput } from './dto/user.dto';
 import { User, UserDocument, UserResult } from './entities/user.entities';
+import { Context } from '@nestjs/graphql';
+import { randomCode } from 'src/utils/utils';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 type UserModelType = Model<User>;
 
@@ -23,7 +30,8 @@ export class UsersService {
   constructor(
     // @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(User.name) private userModel: UserModelType,
-    private loggerService: LoggerService,
+    // @Inject(forwardRef(() => AuthService))
+    private loggerService: LoggerService, // private authService: AuthService,
   ) {
     this.loggerService.setContext('UserService');
   }
@@ -219,27 +227,56 @@ export class UsersService {
     }
   }
 
-  async signUp(register: RegisterInput): Promise<User> {
+  // async signUp(register: RegisterInput): Promise<User> {
+  async signUp(email: string, password: string, code): Promise<User> {
     try {
-      if (register.password != register.confirmPassword) {
-        throw new BadRequestException('Mật khẩu không khớp');
-      }
+      // if (register.password != register.confirmPassword) {
+      //   throw new BadRequestException('Mật khẩu không khớp');
+      // }
 
-      const { password, email } = register;
-      const userExisting = await this.getOne({ email });
+      // const { password, email } = register;
+      // const userExisting = await this.getOne({ email });
 
-      if (userExisting) {
-        throw new BadRequestException('Email đã tồn tại');
-      }
+      // if (userExisting) {
+      //   throw new BadRequestException('Email đã tồn tại');
+      // }
 
       const [user, hashPassword] = await Promise.all([
         this.userModel.create({ email }),
         this.hashPassword(password),
       ]);
       user.password = hashPassword;
+      // const mail = user.email;
+      // await this.findOneAndUpdate({ mail }, { $set: { isConfirmMail: true } });
+      // await this.findOneAndUpdate({ mail }, { $set: { codeMail: code } });
+      user.isConfirmMail = true;
+      user.codeMail = code;
       return user.save();
     } catch (error) {
       throw error;
     }
+  }
+
+  async confirmCode(context, code: string) {
+    const session = context.session;
+    // if (session.mailotp == null) {
+    //   console.log('Session is null or undefined');
+    // }
+
+    // if (session.mailotp.code === code) {
+    //   const user = await this.signUp(session.mailotp);
+    //   const email = user.email;
+    //   await this.findOneAndUpdate({ email }, { $set: { codeMail: code } });
+    // }
+    // console.log(session.mailotp);
+    if (session.mailotp === undefined) {
+      // console.log('Session is null or undefined');
+      throw new BadRequestException('OTP đã hết hạn!');
+    }
+    if (session.mailotp.code != code) {
+      throw new BadRequestException('OTP không khớp!');
+    }
+    const mail = session.mailotp;
+    await this.signUp(mail.mail, mail.pass, mail.code);
   }
 }

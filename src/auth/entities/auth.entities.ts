@@ -17,3 +17,12 @@ export class IJwtPayload {
   @Field({ nullable: true })
   userName: string;
 }
+
+@ObjectType()
+export class UserOTP {
+  @Field(() => String)
+  mail: string;
+
+  @Field(() => Number)
+  code: number;
+}
