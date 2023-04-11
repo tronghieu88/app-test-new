@@ -20,6 +20,7 @@ import { VerifyMailAccount } from 'src/mail/templates/verify.mail';
 import { Context } from '@nestjs/graphql';
 import * as crypto from 'crypto';
 import { ForgotPasswordMail } from 'src/mail/templates/forgotPassword.mail';
+import { SuccessVerifyMail } from 'src/mail/templates/successVerify.mail';
 
 @Injectable()
 export class AuthService {
@@ -154,6 +155,12 @@ export class AuthService {
     }
     // console.log('Giong nhau');
     await this.userService.signUp(session.mailotp, codeSession);
+    // return true;
+
+    // Đăng ký tài khoản thành công
+    // const successMessage = `Đăng ký thành công với email: ${mailSession}`;
+    const successHtml = SuccessVerifyMail.createHTML(mailSession);
+    return successHtml;
   }
 
   async generateTokenLinkConfirmMail(session) {

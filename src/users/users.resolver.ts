@@ -135,6 +135,7 @@ export class UsersResolver {
     // return true;
     console.log('---------------');
     console.log(session.session);
+    // return JSON.stringify(session.session);
     return true;
   }
 

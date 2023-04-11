@@ -2,11 +2,8 @@ import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginInput, RegisterInput } from './dto/auth.dto';
 import { JwtPayload } from './entities/auth.entities';
-import { UseGuards } from '@nestjs/common';
-import { LoginAccessGuard } from 'src/guard/loginAccess.guard';
+
 import { Session } from 'src/decorators/session.decorator';
-import { async } from 'rxjs';
-import session from 'express-session';
 
 @Resolver('Auth')
 export class AuthResolver {
