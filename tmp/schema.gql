@@ -35,6 +35,28 @@ type JwtPayload {
   refreshToken: String!
 }
 
+type ProductResult {
+  results: [Product!]
+  totalCount: Float
+}
+
+type Product {
+  productId: ID!
+  productName: String!
+  quantity: Float
+  price: Float
+  urlImage: [String!]
+  discount: Float
+  description: String!
+  colors: [String!]
+  rating: Float
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  slug: String!
+  keyword: String!
+}
+
 type Query {
   test: String!
   getAllUser: UserResult!
@@ -50,6 +72,18 @@ type Query {
   getSession: Boolean!
   forgotPassword(mail: String!): Boolean!
   confirmMail(email: String!, code: String!): Boolean!
+  test1: String!
+  findProduct(productName: String!): Product!
+  findWithProductName(input: String!): ProductResult!
+  getAllProduct: ProductResult!
+  sortProduct(input: SortProduct!, option: Float!): ProductResult!
+}
+
+enum SortProduct {
+  ProductId
+  Price
+  Discount
+  Quantity
 }
 
 type Mutation {
@@ -63,6 +97,9 @@ type Mutation {
   signIn(input: LoginInput!): JwtPayload!
   signUp(input: RegisterInput!): Boolean!
   changePassword(code: String!, newPassword: String!, reNewPassword: String!): Boolean!
+  createProduct(productInput: ProductInput!): Product!
+  deleteProduct(productID: ProductInput): Boolean!
+  updateProduct(productId: String!, productInput: ProductInput!): Boolean!
 }
 
 input UserInput {
@@ -107,4 +144,16 @@ input RegisterInput {
   confirmPassword: String!
   userName: String
   phoneNumber: String
+}
+
+input ProductInput {
+  productId: String!
+  productName: String
+  quantity: Float
+  price: Float
+  urlImage: [String!]
+  discount: Float
+  description: String
+  colors: [String!]
+  rating: Float
 }

@@ -10,13 +10,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import variable from './configs/env.variable';
 import { MongooseConfigService } from './configs/mongodb.config';
 import { MailModule } from './mail/mail.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), './tmp/schema.gql'),
-      context: ({ req }) => ({ session: req.session }),
+      // context: ({ req }) => ({ session: req.session }),
     }),
     UsersModule,
 
@@ -27,6 +28,7 @@ import { MailModule } from './mail/mail.module';
     AuthModule,
     ConfigModule.forRoot({ load: [variable], isGlobal: true }),
     MailModule,
+    ProductsModule,
   ],
 
   providers: [],
