@@ -16,6 +16,7 @@ export enum SortProduct {
   Price = 'price',
   Discount = 'discount',
   Quantity = 'quantity',
+  Rating = 'rating',
 }
 
 registerEnumType(SortProduct, {

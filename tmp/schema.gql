@@ -84,6 +84,7 @@ enum SortProduct {
   Price
   Discount
   Quantity
+  Rating
 }
 
 type Mutation {
