@@ -48,7 +48,7 @@ export class Product implements IProduct {
   @Field({ nullable: true })
   discount?: number;
 
-  @Field()
+  @Field({ nullable: true })
   description: string;
 
   @Field(() => [String], { nullable: true })

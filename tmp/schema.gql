@@ -47,9 +47,25 @@ type Product {
   price: Float
   urlImage: [String!]
   discount: Float
-  description: String!
+  description: String
   colors: [String!]
   rating: Float
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  slug: String!
+  keyword: String!
+}
+
+type CategoryResult {
+  results: [Category!]
+  totalCount: Float
+}
+
+type Category {
+  categoryId: ID!
+  categoryName: String!
+  description: String
   isDeleted: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -77,6 +93,8 @@ type Query {
   findWithProductName(input: String!): ProductResult!
   getAllProduct: ProductResult!
   sortProduct(input: SortProduct!, option: Float!): ProductResult!
+  testCategory: String!
+  getAllCategory: CategoryResult!
 }
 
 enum SortProduct {
@@ -101,6 +119,7 @@ type Mutation {
   createProduct(productInput: ProductInput!): Product!
   deleteProduct(productID: ProductInput): Boolean!
   updateProduct(productId: String!, productInput: ProductInput!): Boolean!
+  createCategory(categoryInput: CategoryInput!): Category!
 }
 
 input UserInput {
@@ -157,4 +176,10 @@ input ProductInput {
   description: String
   colors: [String!]
   rating: Float
+}
+
+input CategoryInput {
+  categoryId: String!
+  categoryName: String
+  description: String
 }

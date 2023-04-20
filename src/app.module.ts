@@ -11,6 +11,7 @@ import variable from './configs/env.variable';
 import { MongooseConfigService } from './configs/mongodb.config';
 import { MailModule } from './mail/mail.module';
 import { ProductsModule } from './products/products.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ProductsModule } from './products/products.module';
     ConfigModule.forRoot({ load: [variable], isGlobal: true }),
     MailModule,
     ProductsModule,
+    CategoriesModule,
   ],
 
   providers: [],
