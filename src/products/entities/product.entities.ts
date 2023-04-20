@@ -3,6 +3,7 @@ import { IProduct } from '../interfaces/product';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Transform } from 'class-transformer';
+import { Category } from 'src/categories/entities/category.entities';
 
 @ObjectType()
 export class ProductResult implements IResult<Product> {
@@ -71,5 +72,8 @@ export class Product implements IProduct {
 
   @Field(() => String)
   keyword?: string;
+
+  @Field(() => Category, { nullable: true })
+  categoryId: Category;
 }
 // export const ProductSchema = SchemaFactory.createForClass(Product);

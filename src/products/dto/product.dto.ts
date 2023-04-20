@@ -1,6 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IProduct } from '../interfaces/product';
 import { IsNotEmpty } from 'class-validator';
+import { GraphQLObjectID } from 'graphql-scalars';
 
 @InputType()
 export class ProductInput implements IProduct {
@@ -37,4 +38,7 @@ export class ProductInput implements IProduct {
 
   @Field(() => Number, { nullable: true })
   rating: number;
+
+  @Field(() => GraphQLObjectID)
+  categoryId: string;
 }

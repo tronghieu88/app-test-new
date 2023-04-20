@@ -1,3 +1,4 @@
+import { Category } from 'src/categories/entities/category.entities';
 import { Product } from '../entities/product.entities';
 import { Schema, Model } from 'mongoose';
 
@@ -19,4 +20,11 @@ export const ProductSchema = new Schema<Product>({
   updatedAt: { type: Date, default: new Date() },
   slug: { type: String, trim: true },
   keyword: { type: String, trim: true },
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: Category.name,
+    // foreignField: '_id',
+    // localField: 'categoryId',
+    autopopulate: { maxDepth: 1 },
+  },
 });

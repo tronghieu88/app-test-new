@@ -35,6 +35,22 @@ type JwtPayload {
   refreshToken: String!
 }
 
+type CategoryResult {
+  results: [Category!]
+  totalCount: Float
+}
+
+type Category {
+  categoryId: ID!
+  categoryName: String!
+  description: String
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  slug: String!
+  keyword: String!
+}
+
 type ProductResult {
   results: [Product!]
   totalCount: Float
@@ -55,22 +71,7 @@ type Product {
   updatedAt: DateTime!
   slug: String!
   keyword: String!
-}
-
-type CategoryResult {
-  results: [Category!]
-  totalCount: Float
-}
-
-type Category {
-  categoryId: ID!
-  categoryName: String!
-  description: String
-  isDeleted: Boolean!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  slug: String!
-  keyword: String!
+  categoryId: Category
 }
 
 type Query {
@@ -176,7 +177,13 @@ input ProductInput {
   description: String
   colors: [String!]
   rating: Float
+  categoryId: ObjectID!
 }
+
+"""
+A field whose value conforms with the standard mongodb object ID as described here: https://docs.mongodb.com/manual/reference/method/ObjectId/#ObjectId. Example: 5e5677d71bdc2ae76344968c
+"""
+scalar ObjectID
 
 input CategoryInput {
   categoryId: String!

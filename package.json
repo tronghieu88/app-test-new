@@ -37,6 +37,7 @@
     "cookie-parser": "^1.4.6",
     "express-session": "^1.17.3",
     "graphql": "^16.6.0",
+    "graphql-scalars": "^1.21.3",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
     "mongoose-autopopulate": "^1.0.0",
