@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Category } from './entities/category.entities';
 import { CategorySchema } from './schema/categories.schema';
 import { LoggerModule } from 'src/logger/logger.module';
+import { createKeyword, createSlug } from 'src/utils/string.utils';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { LoggerModule } from 'src/logger/logger.module';
           const schema = CategorySchema;
           schema.pre('find', function () {
             this.find({ isDeleted: { $ne: true } });
+          });
+          schema.pre('save', function () {
+            this.slug = createSlug(this.categoryName);
+            this.keyword = createKeyword(this.slug);
           });
           return schema;
         },

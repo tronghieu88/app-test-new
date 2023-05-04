@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Product } from './entities/product.entities';
 import { LoggerModule } from 'src/logger/logger.module';
 import { ProductSchema } from './schema/products.schema';
+import { createKeyword, createSlug } from 'src/utils/string.utils';
 
 @Module({
   imports: [
@@ -17,6 +18,16 @@ import { ProductSchema } from './schema/products.schema';
           schema.pre('find', function () {
             this.find({ isDeleted: { $ne: true } });
           });
+          schema.pre('save', function () {
+            this.slug = createSlug(this.productName);
+            this.keyword = createKeyword(this.slug);
+          });
+          // schema.post('find', function (docs) {
+          //   docs.forEach((doc) => {
+          //     doc.slug = createSlug(doc.productName);
+          //     doc.keyword = createKeyword(doc.slug);
+          //   });
+          // });
           return schema;
         },
       },

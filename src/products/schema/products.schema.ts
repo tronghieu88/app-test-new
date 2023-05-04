@@ -6,7 +6,7 @@ export type ProductModelType = Model<Product>;
 
 export const ProductSchema = new Schema<Product>({
   //   _id: { type: String, unique: true },
-  productId: { type: String, trim: true, required: true, unique: true },
+  productId: { type: String, trim: true, required: true },
   productName: { type: String, trim: true },
   quantity: { type: Number, default: 1 },
   price: { type: Number, default: 1000 },
@@ -20,7 +20,7 @@ export const ProductSchema = new Schema<Product>({
   updatedAt: { type: Date, default: new Date() },
   slug: { type: String, trim: true },
   keyword: { type: String, trim: true },
-  category: {
+  categoryId: {
     type: Schema.Types.ObjectId,
     ref: Category.name,
     // foreignField: '_id',

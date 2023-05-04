@@ -4,7 +4,7 @@ import { Category } from '../entities/category.entities';
 export type CategoryModelType = Model<Category>;
 
 export const CategorySchema = new Schema<Category>({
-  categoryId: { type: String, trim: true, required: true, unique: true },
+  categoryId: { type: String, trim: true, required: true },
   categoryName: { type: String, trim: true },
   description: { type: String, trim: true },
   createdAt: { type: Date, default: new Date() },

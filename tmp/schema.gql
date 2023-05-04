@@ -41,14 +41,15 @@ type CategoryResult {
 }
 
 type Category {
+  _id: ID!
   categoryId: ID!
   categoryName: String!
   description: String
   isDeleted: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-  slug: String!
-  keyword: String!
+  slug: String
+  keyword: String
 }
 
 type ProductResult {
@@ -57,7 +58,8 @@ type ProductResult {
 }
 
 type Product {
-  productId: ID!
+  _id: ID!
+  productId: String!
   productName: String!
   quantity: Float
   price: Float
@@ -69,9 +71,9 @@ type Product {
   isDeleted: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-  slug: String!
-  keyword: String!
-  category: Category
+  slug: String
+  keyword: String
+  categoryId: Category
 }
 
 type Query {

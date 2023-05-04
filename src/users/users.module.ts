@@ -8,6 +8,7 @@ import { UsersController } from './users.controller';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
+import { createKeyword, createSlug } from 'src/utils/string.utils';
 @Module({
   imports: [
     MongooseModule.forFeatureAsync([
@@ -18,6 +19,10 @@ import { JwtService } from '@nestjs/jwt';
           // schema.pre(/^find/, function () {
           schema.pre('find', function () {
             this.find({ isDeleted: { $ne: true } });
+          });
+          schema.pre('save', function () {
+            this.slug = createSlug(this.userName);
+            this.keyword = createKeyword(this.slug);
           });
           return schema;
         },

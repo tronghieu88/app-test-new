@@ -18,10 +18,10 @@ export class CategoriesService {
   }
 
   async create(categoryInput: CategoryInput): Promise<Category> {
-    const categoryExist = await this.categoryModel.findOne({
-      categoryId: categoryInput.categoryId,
-    });
-    throwIfExisted(categoryExist, 'Loại sản phẩm đã tồn tại!');
+    // const categoryExist = await this.categoryModel.findOne({
+    //   categoryId: categoryInput.categoryId,
+    // });
+    // throwIfExisted(categoryExist, 'Loại sản phẩm đã tồn tại!');
     return await this.categoryModel.create(categoryInput);
   }
 

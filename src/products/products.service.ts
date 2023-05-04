@@ -19,10 +19,10 @@ export class ProductsService {
   }
 
   async create(productInput: ProductInput): Promise<Product> {
-    const productExist = await this.productModel.findOne({
-      productId: productInput.productId,
-    });
-    throwIfExisted(productExist, 'Sản phẩm đã tồn tại!');
+    // const productExist = await this.productModel.findOne({
+    //   productId: productInput.productId,
+    // });
+    // throwIfExisted(productExist, 'Sản phẩm đã tồn tại!');
     return await this.productModel.create(productInput);
   }
 
@@ -100,7 +100,9 @@ export class ProductsService {
   //   return { results, totalCount };
   // }
   async getProductTest(): Promise<ProductResult> {
-    const test = await this.productModel.find({ price: 2000000 });
+    const test = await this.productModel.find({
+      categoryId: '643bc5a26ddcff1e95a3604a',
+    });
     const results = test;
     const totalCount = results.length;
     return { results, totalCount };

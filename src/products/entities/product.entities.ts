@@ -16,9 +16,9 @@ export class ProductResult implements IResult<Product> {
 
 @ObjectType()
 export class Product implements IProduct {
-  // @Transform(({ value }) => value.toString())
-  // @Field(() => ID)
-  // _id?: mongoose.Types.ObjectId;
+  @Transform(({ value }) => value.toString())
+  @Field(() => ID)
+  _id?: mongoose.Types.ObjectId;
 
   // @Prop({ required: true, unique: true, _id: false })
   // @Field(() => ID)
@@ -31,7 +31,7 @@ export class Product implements IProduct {
   // @Field(() => ID)
   // _id: string;
 
-  @Field(() => ID)
+  @Field(() => String)
   productId: string;
 
   @Field(() => String)
@@ -67,13 +67,13 @@ export class Product implements IProduct {
   @Field(() => Date)
   updatedAt?: Date;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   slug?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   keyword?: string;
 
   @Field(() => Category, { nullable: true })
-  category: Category;
+  categoryId: Category;
 }
 // export const ProductSchema = SchemaFactory.createForClass(Product);

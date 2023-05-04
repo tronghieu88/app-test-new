@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { ICategory } from '../interfaces/category';
+import { Transform } from 'class-transformer';
+import mongoose from 'mongoose';
 
 @ObjectType()
 export class CategoryResult implements IResult<Category> {
@@ -12,6 +14,10 @@ export class CategoryResult implements IResult<Category> {
 
 @ObjectType()
 export class Category implements ICategory {
+  @Transform(({ value }) => value.toString())
+  @Field(() => ID)
+  _id?: mongoose.Types.ObjectId;
+
   @Field(() => ID)
   categoryId: string;
 
@@ -30,9 +36,9 @@ export class Category implements ICategory {
   @Field(() => Date)
   updatedAt?: Date;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   slug?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   keyword?: string;
 }
