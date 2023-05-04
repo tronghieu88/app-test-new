@@ -2,6 +2,7 @@ import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsPhoneNumber } from 'class-validator';
+// import { IsEmail, IsPhoneNumber } from 'class-validator';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { RoleEnum } from 'src/constants/enum';
 
