@@ -6,7 +6,6 @@ const logger_service_1 = require("./logger/logger.service");
 const config_1 = require("@nestjs/config");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
-const session_middleware_1 = require("./utils/session.middleware");
 const fs = require('fs');
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
@@ -15,7 +14,6 @@ async function bootstrap() {
         fs.mkdirSync(dir);
     }
     app.use(cookieParser());
-    app.use(session_middleware_1.sessionMiddleware);
     app.set('trust proxy');
     const configService = app.get(config_1.ConfigService);
     const port = configService.get('port');
