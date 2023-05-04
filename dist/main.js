@@ -7,8 +7,13 @@ const config_1 = require("@nestjs/config");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
 const session_middleware_1 = require("./utils/session.middleware");
+const fs = require('fs');
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const dir = './tmp';
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
     app.use(cookieParser());
     app.use(session_middleware_1.sessionMiddleware);
     app.set('trust proxy');
@@ -17,7 +22,7 @@ async function bootstrap() {
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.useLogger(new logger_service_1.LoggerService());
     console.log('App running at: ' + port);
-    await app.listen(port);
+    await app.listen(process.env.PORT || port);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
