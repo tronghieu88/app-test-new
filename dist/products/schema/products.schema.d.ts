@@ -25,8 +25,4 @@
 import { Product } from '../entities/product.entities';
 import { Schema, Model } from 'mongoose';
 export type ProductModelType = Model<Product>;
-export declare const ProductSchema: Schema<Product, Model<Product, any, any, any, import("mongoose").Document<unknown, any, Product> & Omit<Product & Required<{
-    _id: import("mongoose").Types.ObjectId;
-}>, never>, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Product, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<Product>> & Omit<import("mongoose").FlatRecord<Product> & Required<{
-    _id: import("mongoose").Types.ObjectId;
-}>, never>>;
+export declare const ProductSchema: Schema<Product, Model<Product, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Product>;

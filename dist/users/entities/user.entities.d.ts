@@ -27,8 +27,4 @@ export declare class User implements IUser {
     isConfirmMail?: boolean;
     codeMail?: string;
 }
-export declare const UserSchema: mongoose.Schema<User, mongoose.Model<User, any, any, any, mongoose.Document<unknown, any, User> & Omit<User & Required<{
-    _id: mongoose.Types.ObjectId;
-}>, never>, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, User, mongoose.Document<unknown, {}, mongoose.FlatRecord<User>> & Omit<mongoose.FlatRecord<User> & Required<{
-    _id: mongoose.Types.ObjectId;
-}>, never>>;
+export declare const UserSchema: mongoose.Schema<User, mongoose.Model<User, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, User>;

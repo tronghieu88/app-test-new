@@ -48,7 +48,7 @@ export declare class UsersService {
     signUp(register: RegisterInput, code: string): Promise<User>;
     confirmCode(context: any, code: string): Promise<void>;
     onlyChangePassword(input: ChangePasswordInput): Promise<void>;
-    changePassword(mail: string, newPassword: string, reNewPassword: string): Promise<import("mongoose").Document<unknown, {}, User> & Omit<User & Required<{
+    changePassword(mail: string, newPassword: string, reNewPassword: string): Promise<import("mongoose").Document<unknown, any, User> & Omit<User & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>, never>>;
 }

@@ -25,8 +25,4 @@
 import { Model, Schema } from 'mongoose';
 import { Category } from '../entities/category.entities';
 export type CategoryModelType = Model<Category>;
-export declare const CategorySchema: Schema<Category, Model<Category, any, any, any, import("mongoose").Document<unknown, any, Category> & Omit<Category & Required<{
-    _id: import("mongoose").Types.ObjectId;
-}>, never>, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Category, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<Category>> & Omit<import("mongoose").FlatRecord<Category> & Required<{
-    _id: import("mongoose").Types.ObjectId;
-}>, never>>;
+export declare const CategorySchema: Schema<Category, Model<Category, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Category>;

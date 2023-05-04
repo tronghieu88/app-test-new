@@ -20,8 +20,4 @@ export declare class Product implements IProduct {
     slug?: string;
     keyword?: string;
 }
-export declare const ProductSchema: mongoose.Schema<Product, mongoose.Model<Product, any, any, any, mongoose.Document<unknown, any, Product> & Omit<Product & {
-    _id: mongoose.Types.ObjectId;
-}, never>, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, Product, mongoose.Document<unknown, {}, mongoose.FlatRecord<Product>> & Omit<mongoose.FlatRecord<Product> & {
-    _id: mongoose.Types.ObjectId;
-}, never>>;
+export declare const ProductSchema: mongoose.Schema<Product, mongoose.Model<Product, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, Product>;
