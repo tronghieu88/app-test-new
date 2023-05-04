@@ -12,7 +12,7 @@ export class MongooseConfigService implements MongooseOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   setMongooseConfig() {
-    console.log(this.configService.get<string>('database.local'));
+    console.log(this.configService.get<string>('database.onl'));
     const debug =
       this.configService.get<string>('NODE_ENV') === 'prod' ? false : true;
     mongoose.set('debug', debug);
@@ -24,7 +24,7 @@ export class MongooseConfigService implements MongooseOptionsFactory {
     this.setMongooseConfig();
     return {
       // uri: 'mongodb://localhost:27017/testlocal',
-      uri: this.configService.get<string>('database.local'),
+      uri: this.configService.get<string>('database.onl'),
       connectionFactory: (connection) => {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         connection.plugin(require('mongoose-autopopulate'));

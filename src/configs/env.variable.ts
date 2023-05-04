@@ -4,6 +4,7 @@ export default () => ({
   port: 3000,
   database: {
     local: 'mongodb://localhost:27017/testnestjsnew',
+    onl: 'mongodb+srv://ngthieu88:v1UrZrOqxppV7jFH@cluster0.mearxrw.mongodb.net/?retryWrites=true&w=majority',
   },
   token: {
     JWT_ACCESS_TOKEN_SECRET: 'accesssecret',

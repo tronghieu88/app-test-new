@@ -74,6 +74,6 @@ export class Product implements IProduct {
   keyword?: string;
 
   @Field(() => Category, { nullable: true })
-  categoryId: Category;
+  category: Category;
 }
 // export const ProductSchema = SchemaFactory.createForClass(Product);

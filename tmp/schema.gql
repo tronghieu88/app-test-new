@@ -71,7 +71,7 @@ type Product {
   updatedAt: DateTime!
   slug: String!
   keyword: String!
-  categoryId: Category
+  category: Category
 }
 
 type Query {
@@ -94,6 +94,7 @@ type Query {
   findWithProductName(input: String!): ProductResult!
   getAllProduct: ProductResult!
   sortProduct(input: SortProduct!, option: Float!): ProductResult!
+  getTestProduct: ProductResult!
   testCategory: String!
   getAllCategory: CategoryResult!
 }

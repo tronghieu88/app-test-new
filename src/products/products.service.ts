@@ -85,4 +85,24 @@ export class ProductsService {
     // console.log(results);
     return { results, totalCount };
   }
+
+  // async getProductTest(): Promise<ProductResult> {
+  //   const test = await this.productModel.aggregate([
+  //     {
+  //       $group: {
+  //         _id: '$quantity',
+  //         products: { $push: '$$ROOT' },
+  //       },
+  //     },
+  //   ]);
+  //   const results = test;
+  //   const totalCount = results.length;
+  //   return { results, totalCount };
+  // }
+  async getProductTest(): Promise<ProductResult> {
+    const test = await this.productModel.find({ price: 2000000 });
+    const results = test;
+    const totalCount = results.length;
+    return { results, totalCount };
+  }
 }

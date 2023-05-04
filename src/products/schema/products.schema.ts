@@ -20,7 +20,7 @@ export const ProductSchema = new Schema<Product>({
   updatedAt: { type: Date, default: new Date() },
   slug: { type: String, trim: true },
   keyword: { type: String, trim: true },
-  categoryId: {
+  category: {
     type: Schema.Types.ObjectId,
     ref: Category.name,
     // foreignField: '_id',

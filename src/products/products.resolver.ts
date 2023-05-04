@@ -78,4 +78,13 @@ export class ProductsResolver {
   ): Promise<ProductResult> {
     return await this.productsService.sortProduct(input, option);
   }
+
+  // @Query(() => ProductResult)
+  // async getTestProduct(): Promise<ProductResult> {
+  //   return await this.productsService.getProductTest();
+  // }
+  @Query(() => ProductResult)
+  async getTestProduct(): Promise<ProductResult> {
+    return await this.productsService.getProductTest();
+  }
 }
