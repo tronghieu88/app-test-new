@@ -8,7 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
-// import { sessionMiddleware } from './utils/session.middleware';
+import { sessionMiddleware } from './utils/session.middleware';
 const fs = require('fs');
 
 async function bootstrap() {
@@ -27,7 +27,7 @@ async function bootstrap() {
   //     cookie: { maxAge: 2000000 },
   //   }),
   // );
-  // app.use(sessionMiddleware);
+  app.use(sessionMiddleware);
   app.set('trust proxy');
 
   const configService = app.get(ConfigService);
