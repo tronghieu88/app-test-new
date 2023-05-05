@@ -13,7 +13,7 @@ const fs = require('fs');
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const dir = './tmp';
+  const dir = '../tmp';
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
