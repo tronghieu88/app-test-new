@@ -5,7 +5,7 @@ export declare class AuthResolver {
     private authService;
     constructor(authService: AuthService);
     signIn(input: LoginInput): Promise<JwtPayload>;
-    signUp1(input: RegisterInput, session: any): Promise<boolean>;
+    signUp(input: RegisterInput, session: any): Promise<boolean>;
     forgotPassword(mail: string, session: any): Promise<boolean>;
     changePassword(session: any, code: string, newPassword: string, reNewPassword: string): Promise<boolean>;
 }
