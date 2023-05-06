@@ -17,7 +17,7 @@ import { CategoriesModule } from './categories/categories.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), './tmp/schema.gql'),
+      autoSchemaFile: join(process.cwd(), '../../../tmp/schema.gql'),
       // context: ({ req }) => ({ session: req.session }),
     }),
     UsersModule,

@@ -10,7 +10,7 @@ const session_middleware_1 = require("./utils/session.middleware");
 const fs = require('fs');
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    const dir = '../tmp';
+    const dir = '../../tmp';
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
