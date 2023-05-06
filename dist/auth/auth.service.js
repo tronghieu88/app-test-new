@@ -72,6 +72,7 @@ let AuthService = class AuthService {
         const password = register.password;
         const string = mail + password + code;
         const html = verify_mail_1.VerifyMailAccount.createHTML(code.toString());
+        await this.mailService.sendMail(mail, 'Verify your account', html);
         console.log('Sign up');
         const session = context.session;
         if (session) {
