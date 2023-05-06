@@ -30,7 +30,7 @@ let AuthResolver = class AuthResolver {
             throw error;
         }
     }
-    signUp(input, session) {
+    signUp1(input, session) {
         try {
             return this.authService.signUp(input, session);
         }
@@ -66,7 +66,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.RegisterInput, Object]),
     __metadata("design:returntype", Promise)
-], AuthResolver.prototype, "signUp", null);
+], AuthResolver.prototype, "signUp1", null);
 __decorate([
     (0, graphql_1.Query)(() => Boolean),
     __param(0, (0, graphql_1.Args)({ name: 'mail', type: () => String })),

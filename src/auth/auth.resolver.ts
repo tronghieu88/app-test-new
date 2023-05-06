@@ -23,7 +23,7 @@ export class AuthResolver {
 
   // @UseGuards(LocalAccessGuard)
   @Mutation(() => Boolean)
-  signUp(
+  signUp1(
     @Args('input', { type: () => RegisterInput }) input: RegisterInput,
     @Session() session,
   ): Promise<boolean> {
