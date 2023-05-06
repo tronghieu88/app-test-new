@@ -123,7 +123,8 @@ export class AuthService {
     // );
     const html = VerifyMailAccount.createHTML(code.toString());
 
-    await this.mailService.sendMail(mail, 'Verify your account', html);
+    // await this.mailService.sendMail(mail, 'Verify your account', html);
+    console.log('Sign up');
 
     // session.mailotp = { mail: email, code: code };
 
