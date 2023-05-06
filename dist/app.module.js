@@ -29,6 +29,8 @@ AppModule = __decorate([
             graphql_1.GraphQLModule.forRoot({
                 driver: apollo_1.ApolloDriver,
                 autoSchemaFile: (0, path_1.join)(process.cwd(), '../../../tmp/schema.gql'),
+                playground: true,
+                introspection: true,
             }),
             users_module_1.UsersModule,
             mongoose_1.MongooseModule.forRootAsync({
