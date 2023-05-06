@@ -71,10 +71,7 @@ let AuthService = class AuthService {
         const mail = register.mail;
         const password = register.password;
         const string = mail + password + code;
-        const token = await this.hashMD5(string);
-        const verificationLink = `http://localhost:3000/auth/verify-email?token=${token}`;
-        console.log('Link verify: ' + verificationLink);
-        const html = verify_mail_1.VerifyMailAccount.createHTML(code.toString(), verificationLink.toString());
+        const html = verify_mail_1.VerifyMailAccount.createHTML(code.toString());
         await this.mailService.sendMail(mail, 'Verify your account', html);
         const session = context.session;
         if (session) {

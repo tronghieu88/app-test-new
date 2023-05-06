@@ -112,15 +112,16 @@ export class AuthService {
 
     const string = mail + password + code;
 
-    const token = await this.hashMD5(string);
+    // const token = await this.hashMD5(string);
 
-    // const verificationLink = `http://localhost:3000/auth/verify-email?mail=${mail}&code=${code}`;
-    const verificationLink = `http://localhost:3000/auth/verify-email?token=${token}`;
-    console.log('Link verify: ' + verificationLink);
-    const html = VerifyMailAccount.createHTML(
-      code.toString(),
-      verificationLink.toString(),
-    );
+    // // const verificationLink = `http://localhost:3000/auth/verify-email?mail=${mail}&code=${code}`;
+    // const verificationLink = `http://localhost:3000/auth/verify-email?token=${token}`;
+    // console.log('Link verify: ' + verificationLink);
+    // const html = VerifyMailAccount.createHTML(
+    //   code.toString(),
+    //   verificationLink.toString(),
+    // );
+    const html = VerifyMailAccount.createHTML(code.toString());
 
     await this.mailService.sendMail(mail, 'Verify your account', html);
 
