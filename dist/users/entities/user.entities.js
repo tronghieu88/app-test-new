@@ -99,7 +99,7 @@ __decorate([
 ], User.prototype, "isDeleted", void 0);
 __decorate([
     (0, mongoose_1.Prop)(String),
-    (0, graphql_1.Field)(),
+    (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "keyword", void 0);
 __decorate([
@@ -109,7 +109,7 @@ __decorate([
 ], User.prototype, "updatedAt", void 0);
 __decorate([
     (0, mongoose_1.Prop)(String),
-    (0, graphql_1.Field)(),
+    (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "slug", void 0);
 __decorate([

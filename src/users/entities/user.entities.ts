@@ -78,7 +78,7 @@ export class User implements IUser {
   isDeleted?: boolean;
 
   @Prop(String)
-  @Field()
+  @Field({ nullable: true })
   keyword?: string;
 
   @Prop({ default: new Date() })
@@ -86,7 +86,7 @@ export class User implements IUser {
   updatedAt?: Date;
 
   @Prop(String)
-  @Field()
+  @Field({ nullable: true })
   slug?: string;
 
   // @HideField()
